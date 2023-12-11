@@ -37,13 +37,16 @@ void compute(){
 	vector3* dev_hPos;
 	vector3* dev_values;
 	//cudaMalloc((void**)&dev_accels, sizeof(vector3*) * NUMENTITIES);
-	cudaMalloc(&dev_accels, sizeof(vector3**) * NUMENTITIES );
+	cudaMalloc(&dev_values, sizeof(vector3)*NUMENTITIES*NUMENTITIES);
+	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES );
+	for (i = 0; i < NUMENTITIES; ++i) {
+		cudaMalloc(&dev_accels[i], sizeof(vector3) * NUMENTITIES);
+	  }
 	cudaMalloc(&dev_mass, sizeof(double) * NUMENTITIES );
 	//cudaMalloc((void**)&dev_mass, sizeof(vector3) * NUMENTITIES);
 	cudaMemcpy(dev_mass, mass, sizeof(double) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc(&dev_hPos, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
-	cudaMalloc(&dev_values, sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
