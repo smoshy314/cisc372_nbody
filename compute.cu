@@ -17,7 +17,7 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 		}else{
 			vector3 distance;
 			distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
-			if(k==0){
+			if(1){
 				double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
 				double magnitude=sqrt(magnitude_sq);
 				double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
@@ -85,7 +85,7 @@ void compute(){
 	cudaMemcpy(hPos, dev_hPos, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	//vector3** accels = (vector3**)malloc(sizeof(vector3*) * NUMENTITIES);
 	//cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
-	if (1) {
+	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
 	}
 	//sum up the rows of our matrix to get effect on each entity, then update velocity and position.
