@@ -35,11 +35,11 @@ void compute(){
 	vector3** dev_mass;
 	vector3* dev_hPos;
 	vector3* dev_values;
-	cudaMalloc((void**)&dev_accels, sizeof(vector3*) * NUMENTITIES);
-	//cudaMalloc( (vector3**) &dev_accels, sizeof(vector3*) *N UMENTITIES );
-	cudaMalloc( (vector3**) &dev_mass, sizeof(vector3*)*NUMENTITIES );
-	cudaMalloc((void**)&dev_mass, sizeof(vector3) * NUMENTITIES);
-	//cudaMemcpy(&dev_mass, mass,sizeof(vector3*)*NUMENTITIES,cudaMemcpyHostToDevice);
+	//cudaMalloc((void**)&dev_accels, sizeof(vector3*) * NUMENTITIES);
+	cudaMalloc( (vector3**) dev_accels, sizeof(vector3*) *N UMENTITIES );
+	cudaMalloc( (vector3**) dev_mass, sizeof(vector3*)*NUMENTITIES );
+	//cudaMalloc((void**)&dev_mass, sizeof(vector3) * NUMENTITIES);
+	cudaMemcpy(&dev_mass, mass,sizeof(vector3*)*NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc( (vector3*) &dev_hPos, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(&dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc( (vector3*) &dev_values, sizeof(vector3)*NUMENTITIES*NUMENTITIES);
@@ -49,7 +49,7 @@ void compute(){
 	
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos, dev_values);
 
-	cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost)
+	cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	
 	//sum up the rows of our matrix to get effect on each entity, then update velocity and position.
 	for (i=0;i<NUMENTITIES;i++){
