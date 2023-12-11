@@ -51,7 +51,7 @@ void compute(){
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos, dev_values);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
-		fprintf(stderr, "CUDA Error: %s\n", cudaGetErrorString(cudaError));
+		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
 	}
 
 	vector3** accels=(vector3**)malloc(sizeof(vector3*)*NUMENTITIES);
