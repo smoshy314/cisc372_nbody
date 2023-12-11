@@ -31,12 +31,15 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 void compute(){
 	//make an acceleration matrix which is NUMENTITIES squared in size;
 	int i,j,k;
-	vector3** dev_accels;
 	double * dev_mass;
 	vector3* dev_hPos;
 	vector3* dev_values;
 	cudaMalloc(&dev_values, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
+	vector3** dev_accels;
 	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES);
+	for (int i = 0; i < NUMENTITIES; ++i) {
+		cudaMalloc(&dev_accels[i], sizeof(vector3) * NUMENTITIES);
+	}
 	cudaMalloc(&dev_mass, sizeof(double) * NUMENTITIES );
 	cudaMemcpy(dev_mass, mass, sizeof(double) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc(&dev_hPos, sizeof(vector3) * NUMENTITIES );
