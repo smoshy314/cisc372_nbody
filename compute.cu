@@ -67,6 +67,7 @@ void compute(){
 		for (j=0;j<NUMENTITIES;j++){
 			for (k=0;k<3;k++)
 				continue;
+				accel_sum[k]+=accels[i][j];
 				//accel_sum[k]+=accels[i][j][k];
 		}
 		//compute the new velocity based on the acceleration and time interval
