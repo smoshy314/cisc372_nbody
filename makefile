@@ -1,5 +1,5 @@
 FLAGS= -DDEBUG
-LIBS= -lm
+LIBS= -lm -lcudart
 ALWAYS_REBUILD=makefile
 
 nbody: nbody.o compute.o
