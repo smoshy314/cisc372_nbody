@@ -52,19 +52,19 @@ void compute(){
 	cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	
 	//sum up the rows of our matrix to get effect on each entity, then update velocity and position.
-	// for (i=0;i<NUMENTITIES;i++){
-	// 	vector3 accel_sum={0,0,0};
-	// 	for (j=0;j<NUMENTITIES;j++){
-	// 		for (k=0;k<3;k++)
-	// 			accel_sum[k]+=accels[i][j][k];
-	// 	}
-	// 	//compute the new velocity based on the acceleration and time interval
-	// 	//compute the new position based on the velocity and time interval
-	// 	for (k=0;k<3;k++){
-	// 		hVel[i][k]+=accel_sum[k]*INTERVAL;
-	// 		hPos[i][k]+=hVel[i][k]*INTERVAL;
-	// 	}
-	// }
+	for (i=0;i<NUMENTITIES;i++){
+		vector3 accel_sum={0,0,0};
+		for (j=0;j<NUMENTITIES;j++){
+			for (k=0;k<3;k++)
+				accel_sum[k]+=accels[i][j][k];
+		}
+		//compute the new velocity based on the acceleration and time interval
+		//compute the new position based on the velocity and time interval
+		for (k=0;k<3;k++){
+			hVel[i][k]+=accel_sum[k]*INTERVAL;
+			hPos[i][k]+=hVel[i][k]*INTERVAL;
+		}
+	}
 	free(accels);
 	free(values);
 	cudaFree(dev_hPos);
