@@ -38,13 +38,13 @@ __global__ void contructAccels(vector3** dev_accels, vector3* dev_values){
 void compute(){
 	//make an acceleration matrix which is NUMENTITIES squared in size;
 	int i,j,k;
+	vector3* dev_values;
 	vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	cudaMalloc(&dev_values, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
 	cudaMemcpy(dev_values, values,sizeof(vector3) * NUMENTITIES * NUMENTITIES,cudaMemcpyHostToDevice);
 
 	double * dev_mass;
 	vector3* dev_hPos;
-	vector3* dev_values;
 	vector3** dev_accels;
 	cudaMalloc(&dev_accels, sizeof(vector3**) * NUMENTITIES);
 	cudaMalloc(&dev_mass, sizeof(double) * NUMENTITIES );
