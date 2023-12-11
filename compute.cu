@@ -33,7 +33,7 @@ __global__ void contructAccels(vector3** dev_accels, vector3* dev_values){
 	}
 }
 
-__global__ void sumRows(vector3** dev_accels, vector3* dev_hPos, vector3* d_hVel){
+__global__ void sumRows(vector3** dev_accels, vector3* dev_hPos, vector3* dev_hVel){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k = threadIdx.z;
@@ -71,7 +71,7 @@ void compute(){
 	cudaMalloc(&dev_hPos, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc(&dev_hVel, sizeof(vector3) * NUMENTITIES );
-	cudaMemcpy(dev_hVel, hvel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
+	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
@@ -90,7 +90,7 @@ void compute(){
 	}
 	//sum up the rows of our matrix to get effect on each entity, then update velocity and position.
 	
-	free(accels);
+	//free(accels);
 	cudaFree(dev_hPos);
 	cudaFree(dev_mass);
 	cudaFree(dev_accels);
