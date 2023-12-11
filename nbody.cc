@@ -6,7 +6,6 @@
 #include "config.h"
 #include "planets.h"
 #include "compute.h"
-#include <cuda.h>
 
 // represents the objects in the system.  Global variables
 vector3 *hVel, *d_hVel;
