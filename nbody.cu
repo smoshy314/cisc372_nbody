@@ -80,7 +80,6 @@ void printSystem(FILE* handle){
 	for (i=0;i<NUMENTITIES;i++){
 		fprintf(handle,"pos=(");
 		for (j=0;j<3;j++){
-			printf("i:%d, j:%d", i, j);
 			fprintf(handle,"%lf,",hPos[i][j]);
 		}
 		printf("),v=(");
