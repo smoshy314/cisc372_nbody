@@ -74,8 +74,8 @@ void compute(){
 	cudaMalloc(&dev_hVel, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	
-	dim3 blockSize(18,18,3);
-	dim3 numBlocks((NUMENTITIES+323)/324);
+	dim3 blockSize(16,16,3);
+	dim3 numBlocks((NUMENTITIES+255)/256);
 	
 	contructAccels<<<(NUMENTITIES+1023)/1024, 1024>>>(dev_accels, dev_values);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
