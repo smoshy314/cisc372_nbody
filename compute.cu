@@ -52,7 +52,7 @@ void compute(){
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
 	
-	contructAccels<<<(NUMENTITIES+1023/1024), 1024>>>(dev_accels, dev_values);
+	contructAccels<<<(NUMENTITIES+1023)/1024, 1024>>>(dev_accels, dev_values);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	cudaError_t cudaError = cudaGetLastError();
 
