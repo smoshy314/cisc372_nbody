@@ -77,9 +77,12 @@ void compute(){
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
 	
-	dim3 bS(1024,1);
+	int gridD = (NUMENTITIES/256) +1;
+	dim3 dimGrid(gridD,1);
+	dim3 dimAc(256,1);
+
 	dim3 numB((NUMENTITIES+1023)/1024);
-	contructAccels<<<(NUMENTITIES+511)/512, 512>>>(dev_accels, dev_values);
+	contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
