@@ -70,8 +70,7 @@ void compute(){
 			hPos[i][k]+=hVel[i][k]*INTERVAL;
 		}
 	}
-	//free(accels);
-	free(values);
+	free(accels);
 	cudaFree(dev_hPos);
 	cudaFree(dev_mass);
 	cudaFree(dev_accels);
