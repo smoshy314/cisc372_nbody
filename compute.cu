@@ -32,14 +32,14 @@ void compute(){
 	vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	vector3** accels=(vector3**)malloc(sizeof(vector3*)*NUMENTITIES);
 	vector3** dev_accels;
-	vector3** dev_mass;
+	double * dev_mass;
 	vector3* dev_hPos;
 	vector3* dev_values;
 	//cudaMalloc((void**)&dev_accels, sizeof(vector3*) * NUMENTITIES);
 	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES );
-	cudaMalloc(&dev_mass, sizeof(vector3*)*NUMENTITIES );
+	cudaMalloc(&dev_mass, sizeof(double) * NUMENTITIES );
 	//cudaMalloc((void**)&dev_mass, sizeof(vector3) * NUMENTITIES);
-	cudaMemcpy(&dev_mass, mass,sizeof(vector3*)*NUMENTITIES,cudaMemcpyHostToDevice);
+	cudaMemcpy(&dev_mass, mass, sizeof(double) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc(&dev_hPos, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(&dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc(&dev_values, sizeof(vector3)*NUMENTITIES*NUMENTITIES);
