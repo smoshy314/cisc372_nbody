@@ -12,7 +12,7 @@ __global__ void accelComputeKernal(vector3** dev_accels, vector3** dev_mass, vec
 	dev_accels[i]=&dev_values[i*NUMENTITIES];
 
 	if (i==j) {
-		FILL_VECTOR(accels[i][j],0,0,0);
+		FILL_VECTOR(dev_accels[i][j],0,0,0);
 	}else{
 		vector3 distance;
 		distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
@@ -37,9 +37,9 @@ void compute(){
 	vector3** dev_values;
 	HANDLE_ERROR( cudaMalloc( (vector3**) &dev_accels, sizeof(vector3*)*NUMENTITIES ));
 	HANDLE_ERROR( cudaMalloc( (vector3**) &dev_mass, sizeof(vector3*)*NUMENTITIES ));
-	cudaMemcpy(&dev_mass, mass,sizeof(vector3*)*NUMENTITIES,cudaMemcpyHostToDevice)
+	cudaMemcpy(&dev_mass, mass,sizeof(vector3*)*NUMENTITIES,cudaMemcpyHostToDevice);
 	HANDLE_ERROR( cudaMalloc( (vector3*) &dev_hPos, sizeof(vector3) * NUMENTITIES ));
-	cudaMemcpy(&dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice)
+	cudaMemcpy(&dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	HANDLE_ERROR( cudaMalloc( (vector3*) &dev_values, sizeof(vector3)*NUMENTITIES*NUMENTITIES));
 	
 	dim3 blockSize(18,18,3);
