@@ -32,7 +32,6 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 void compute(){
 	//make an acceleration matrix which is NUMENTITIES squared in size;
 	int i,j,k;
-	vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	vector3** dev_accels;
 	double * dev_mass;
 	vector3* dev_hPos;
