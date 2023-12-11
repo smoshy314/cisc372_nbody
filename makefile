@@ -4,7 +4,7 @@ ALWAYS_REBUILD=makefile
 
 nbody: nbody.o compute.o
 	nvcc $(FLAGS) $^ -o $@ $(LIBS)
-nbody.o: nbody.cc planets.h config.h vector.h $(ALWAYS_REBUILD)
+nbody.o: nbody.cu planets.h config.h vector.h $(ALWAYS_REBUILD)
 	nvcc $(FLAGS) -c $< 
 compute.o: compute.cu config.h vector.h $(ALWAYS_REBUILD)
 	nvcc $(FLAGS) -c $< 
