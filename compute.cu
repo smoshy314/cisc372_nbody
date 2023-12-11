@@ -79,6 +79,9 @@ void compute(){
 	
 	contructAccels<<<(NUMENTITIES+1023)/1024, 1024>>>(dev_accels, dev_values);
 	cudaError_t cudaError = cudaGetLastError();
+	if (cudaError != cudaSuccess) {
+		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
+	}
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	
 
@@ -87,9 +90,7 @@ void compute(){
 	cudaMemcpy(hPos, dev_hPos, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	//vector3** accels = (vector3**)malloc(sizeof(vector3*) * NUMENTITIES);
 	//cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
-	if (cudaError != cudaSuccess) {
-		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
-	}
+	
 	//sum up the rows of our matrix to get effect on each entity, then update velocity and position.
 	
 	//free(accels);
