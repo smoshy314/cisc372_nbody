@@ -66,9 +66,7 @@ void compute(){
 		vector3 accel_sum={0,0,0};
 		for (j=0;j<NUMENTITIES;j++){
 			for (k=0;k<3;k++)
-				continue;
-				accel_sum[k]+=accels[i][j];
-				//accel_sum[k]+=accels[i][j][k];
+				accel_sum[k]+=accels[1][1][1];
 		}
 		//compute the new velocity based on the acceleration and time interval
 		//compute the new position based on the velocity and time interval
