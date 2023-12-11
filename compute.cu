@@ -11,7 +11,7 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 	int k = threadIdx.z;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		//dev_accels[i]=&dev_values[i*NUMENTITIES];
+		dev_accels[i]=&dev_values[i*NUMENTITIES];
 
 		if (i==j) {
 			FILL_VECTOR(dev_accels[i][j],0,0,0);
@@ -37,7 +37,7 @@ void compute(){
 	vector3* dev_hPos;
 	vector3* dev_values;
 	//cudaMalloc((void**)&dev_accels, sizeof(vector3*) * NUMENTITIES);
-	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES );
+	cudaMalloc(&dev_accels, sizeof(vector3**) * NUMENTITIES );
 	cudaMalloc(&dev_mass, sizeof(double) * NUMENTITIES );
 	//cudaMalloc((void**)&dev_mass, sizeof(vector3) * NUMENTITIES);
 	cudaMemcpy(dev_mass, mass, sizeof(double) * NUMENTITIES,cudaMemcpyHostToDevice);
