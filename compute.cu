@@ -38,7 +38,7 @@ __global__ void contructAccels(vector3** dev_accels, vector3* dev_values){
 void compute(){
 	//make an acceleration matrix which is NUMENTITIES squared in size;
 	int i,j,k;
-	vector3* values=(vector3)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
+	vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	double * dev_mass;
 	vector3* dev_hPos;
 	vector3* dev_values;
