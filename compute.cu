@@ -49,7 +49,10 @@ void compute(){
 	dim3 numBlocks((NUMENTITIES+323)/324);
 	
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos, dev_values);
-	cudaGetLastError();
+	cudaError_t cudaError = cudaGetLastError();
+	if (cudaError != cudaSuccess) {
+		fprintf(stderr, "CUDA Error: %s\n", cudaGetErrorString(cudaError));
+	}
 
 	vector3** accels=(vector3**)malloc(sizeof(vector3*)*NUMENTITIES);
 	cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
