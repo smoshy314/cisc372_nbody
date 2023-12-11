@@ -49,6 +49,7 @@ void compute(){
 	dim3 numBlocks((NUMENTITIES+323)/324);
 	
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos, dev_values);
+	cudaGetLastError();
 
 	vector3** accels=(vector3**)malloc(sizeof(vector3*)*NUMENTITIES);
 	cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
@@ -67,11 +68,10 @@ void compute(){
 			hPos[i][k]+=hVel[i][k]*INTERVAL;
 		}
 	}
-	free(accels);
+	//free(accels);
 	free(values);
 	cudaFree(dev_hPos);
 	cudaFree(dev_mass);
 	cudaFree(dev_accels);
 	cudaFree(dev_values);
-	cudaGetLastError();
 }
