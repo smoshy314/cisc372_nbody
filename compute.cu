@@ -35,12 +35,12 @@ void compute(){
 	vector3** dev_mass;
 	vector3** dev_hPos;
 	vector3** dev_values;
-	HANDLE_ERROR( cudaMalloc( (vector3**) &dev_accels, sizeof(vector3*)*NUMENTITIES ));
-	HANDLE_ERROR( cudaMalloc( (vector3**) &dev_mass, sizeof(vector3*)*NUMENTITIES ));
+	cudaMalloc( (vector3**) &dev_accels, sizeof(vector3*)*NUMENTITIES );
+	cudaMalloc( (vector3**) &dev_mass, sizeof(vector3*)*NUMENTITIES );
 	cudaMemcpy(&dev_mass, mass,sizeof(vector3*)*NUMENTITIES,cudaMemcpyHostToDevice);
-	HANDLE_ERROR( cudaMalloc( (vector3*) &dev_hPos, sizeof(vector3) * NUMENTITIES ));
+	cudaMalloc( (vector3*) &dev_hPos, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(&dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
-	HANDLE_ERROR( cudaMalloc( (vector3*) &dev_values, sizeof(vector3)*NUMENTITIES*NUMENTITIES));
+	cudaMalloc( (vector3*) &dev_values, sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
