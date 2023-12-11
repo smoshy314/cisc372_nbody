@@ -28,16 +28,18 @@ __global__ void accelComputeKernal(vector3** dev_accels, vector3** dev_mass, vec
 //Side Effect: Modifies the hPos and hVel arrays with the new positions and accelerations after 1 INTERVAL
 void compute(){
 	//make an acceleration matrix which is NUMENTITIES squared in size;
-	int i,j,k;
+	//int i,j,k;
 	vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	vector3** accels=(vector3**)malloc(sizeof(vector3*)*NUMENTITIES);
 	vector3** dev_accels;
 	vector3** dev_mass;
 	vector3* dev_hPos;
 	vector3* dev_values;
-	cudaMalloc( (vector3**) &dev_accels, sizeof(vector3*)*NUMENTITIES );
+	cudaMalloc((void**)&dev_accels, sizeof(vector3*) * NUMENTITIES);
+	//cudaMalloc( (vector3**) &dev_accels, sizeof(vector3*) *N UMENTITIES );
 	cudaMalloc( (vector3**) &dev_mass, sizeof(vector3*)*NUMENTITIES );
-	cudaMemcpy(&dev_mass, mass,sizeof(vector3*)*NUMENTITIES,cudaMemcpyHostToDevice);
+	cudaMalloc((void**)&dev_mass, sizeof(vector3) * NUMENTITIES);
+	//cudaMemcpy(&dev_mass, mass,sizeof(vector3*)*NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc( (vector3*) &dev_hPos, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(&dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc( (vector3*) &dev_values, sizeof(vector3)*NUMENTITIES*NUMENTITIES);
