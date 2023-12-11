@@ -2,6 +2,7 @@
 #include <math.h>
 #include "vector.h"
 #include "config.h"
+#include <cuda.h>
 
 __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vector3* dev_hPos, vector3* dev_values){
 	int i = blockIdx.x * blockDim.x * threadIdx.x;
