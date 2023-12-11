@@ -82,10 +82,10 @@ void compute(){
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
 	}
-	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
+	//accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	
 
-	sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
+	//sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
 	cudaMemcpy(hVel, dev_hVel, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	cudaMemcpy(hPos, dev_hPos, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	//vector3** accels = (vector3**)malloc(sizeof(vector3*) * NUMENTITIES);
