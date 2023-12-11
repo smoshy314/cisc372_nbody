@@ -11,7 +11,6 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 	int k = threadIdx.z;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		dev_accels[i]=&dev_values[i*NUMENTITIES];
 
 		if (i==j) {
 			FILL_VECTOR(dev_accels[i][j],0,0,0);
