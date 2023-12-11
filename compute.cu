@@ -77,7 +77,9 @@ void compute(){
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
 	
-	contructAccels<<<(NUMENTITIES+1023)/1024, 1024>>>(dev_accels, dev_values);
+	dim3 bS(1024,1);
+	dim3 numB((NUMENTITIES+1023)/1024);
+	contructAccels<<<numB, bS>>>(dev_accels, dev_values);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
