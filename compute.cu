@@ -17,10 +17,11 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 		}else{
 			vector3 distance;
 			distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
-			double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
-			double magnitude=sqrt(magnitude_sq);
-			double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
-			FILL_VECTOR(dev_accels[i][j],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);
+			if(k==0){
+				double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
+				double magnitude=sqrt(magnitude_sq);
+				double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
+				FILL_VECTOR(dev_accels[i][j],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);}	
 		}
 	}
 }
@@ -31,6 +32,10 @@ __global__ void contructAccels(vector3** dev_accels, vector3* dev_values){
 		dev_accels[i] = &dev_values[i*NUMENTITIES];
 	}
 }
+
+// __global__ void sumRows(vector3** dev_accels, vector3* dev_hPos, vector3* d_hVel){
+	
+// }
 //compute: Updates the positions and locations of the objects in the system based on gravity.
 //Parameters: None
 //Returns: None
@@ -71,8 +76,7 @@ void compute(){
 		vector3 accel_sum={0,0,0};
 		for (j=0;j<NUMENTITIES;j++){
 			for (k=0;k<3;k++)
-				continue;
-				//accel_sum[k]+=accels[i][j][k];
+				accel_sum[k]+=accels[i][j][k];
 		}
 		//compute the new velocity based on the acceleration and time interval
 		//compute the new position based on the velocity and time interval
