@@ -25,7 +25,7 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 	}
 }
 
-__global__ void contructAccels(dev_accels, dev_values){
+__global__ void contructAccels(vector3** dev_accels, vector3* dev_values){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	if (i < NUMENTITIES){
 		dev_accels[i] = &dev_values[i*NUMENTITIES];
@@ -41,7 +41,7 @@ void compute(){
 	double * dev_mass;
 	vector3* dev_hPos;
 	vector3* dev_values;
-	cudaMalloc(&dev_values, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
+	cudaMalloc(&dev_values, sizeof(vector3*) * NUMENTITIES * NUMENTITIES);
 	vector3** dev_accels;
 	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES);
 	cudaMalloc(&dev_mass, sizeof(double) * NUMENTITIES );
