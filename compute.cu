@@ -5,13 +5,12 @@
 #include "config.h"
 #include <cuda.h>
 
-__global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vector3* dev_hPos, vector3* dev_values){
+__global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vector3* dev_hPos){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k = threadIdx.z;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		dev_accels[i] = &dev_values[i*NUMENTITIES];
 		
 		if (i==j) {
 			FILL_VECTOR(dev_accels[i][j],0,0,0);
@@ -23,6 +22,13 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 			double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
 			FILL_VECTOR(dev_accels[i][j],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);
 		}
+	}
+}
+
+__global__ void contructAccels(dev_accels, dev_values){
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
+	if (i < NUMENTITIES){
+		dev_accels[i] = &dev_values[i*NUMENTITIES];
 	}
 }
 //compute: Updates the positions and locations of the objects in the system based on gravity.
@@ -46,7 +52,8 @@ void compute(){
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
 	
-	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos, dev_values);
+	contructAccels<<<(NUMENTITIES+1023/1024), 1024>>>(dev_accels, dev_values);
+	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	cudaError_t cudaError = cudaGetLastError();
 
 	vector3** accels = (vector3**)malloc(sizeof(vector3*) * NUMENTITIES);
