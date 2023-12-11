@@ -5,9 +5,9 @@
 #include <cuda.h>
 
 __global__ void accelComputeKernal(vector3** dev_accels, vector3** dev_mass, vector3* dev_hPos, vector3* dev_values){
-	int i = blockIdx.x * blockDim.x * threadIdx.x
-	int j = blockIdx.y * blockDim.y * threadIdx.y
-	int k = threadIdx.z
+	int i = blockIdx.x * blockDim.x * threadIdx.x;
+	int j = blockIdx.y * blockDim.y * threadIdx.y;
+	int k = threadIdx.z;
 
 	dev_accels[i]=&dev_values[i*NUMENTITIES];
 
