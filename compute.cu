@@ -60,6 +60,7 @@ void compute(){
 	cudaMalloc(&dev_values, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
 	cudaMemcpy(dev_values, values,sizeof(vector3) * NUMENTITIES * NUMENTITIES,cudaMemcpyHostToDevice);
 
+	int gridD = (NUMENTITIES/256) +1;
 	vector3** dev_accels;
 	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES);
 	
@@ -81,7 +82,6 @@ void compute(){
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
 	
-	int gridD = (NUMENTITIES/256) +1;
 	
 
 	
