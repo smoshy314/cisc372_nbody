@@ -10,9 +10,9 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k = threadIdx.z;
 	int index = i * NUMENTITIES + j;
-
+	FILL_VECTOR(dev_accels[index],blockIdx.x,blockDim.x,threadIdx.x)
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		FILL_VECTOR(dev_accels[index],i,j,k)
+		
 		// if (i==j) {
 		// 	FILL_VECTOR(dev_accels[index],0,0,0);
 		// }else{
