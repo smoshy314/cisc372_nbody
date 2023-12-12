@@ -5,15 +5,16 @@
 #include "config.h"
 #include <cuda.h>
 
-__global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vector3* dev_hPos){
+__global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vector3* dev_hPos){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k = threadIdx.z;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		
+		int index = i * NUMENTITIES + j;
+
 		if (i==j) {
-			FILL_VECTOR(dev_accels[i][j],0,0,0);
+			FILL_VECTOR(dev_accels[index],0,0,0);
 		}else{
 			vector3 distance;
 			distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
@@ -21,26 +22,26 @@ __global__ void accelComputeKernal(vector3** dev_accels, double * dev_mass, vect
 				double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
 				double magnitude=sqrt(magnitude_sq);
 				double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
-				FILL_VECTOR(dev_accels[i][j],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);}	
+				FILL_VECTOR(dev_accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);}	
 		}
 	}
 }
 
-__global__ void contructAccels(vector3** dev_accels, vector3* dev_values){
-	int i = blockIdx.x * blockDim.x + threadIdx.x;
-	if (i < NUMENTITIES){
-		dev_accels[i] = &dev_values[i*NUMENTITIES];
-	}
-}
+// __global__ void contructAccels(vector3** dev_accels, vector3* dev_values){
+// 	int i = blockIdx.x * blockDim.x + threadIdx.x;
+// 	if (i < NUMENTITIES){
+// 		dev_accels[i] = &dev_values[i*NUMENTITIES];
+// 	}
+// }
 
-__global__ void sumRows(vector3** dev_accels, vector3* dev_hPos, vector3* dev_hVel){
+__global__ void sumRows(vector3* dev_accels, vector3* dev_hPos, vector3* dev_hVel){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k = threadIdx.z;
 
 	if(i < NUMENTITIES && j< NUMENTITIES){
 	vector3 accel_sum={0,0,0};
-	accel_sum[k]+=dev_accels[i][j][k];
+	accel_sum[k]+=dev_accels[i * NUMENTITIES + j;][k];
 		
 //compute the new velocity based on the acceleration and time interval
 //compute the new position based on the velocity and time interval
@@ -61,8 +62,11 @@ void compute(){
 	cudaMemcpy(dev_values, values,sizeof(vector3) * NUMENTITIES * NUMENTITIES,cudaMemcpyHostToDevice);
 
 	int gridD = (NUMENTITIES/256) +1;
-	vector3** dev_accels;
-	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES);
+	// vector3** dev_accels;
+	// cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES);
+	vector3* dev_accels;
+	cudaMalloc(&dev_accels, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
+
 	
 	dim3 dimGrid(gridD,1);
 	dim3 dimAc(256,1);
