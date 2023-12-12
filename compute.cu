@@ -84,9 +84,7 @@ void compute(){
 	dim3 numBlocks((NUMENTITIES+17)/18, (NUMENTITIES+17)/18);
 	dim3 blockSize(18, 18, 3);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
-	
-	
-
+	cudaDeviceSynchronize();
 	sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
