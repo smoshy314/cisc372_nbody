@@ -81,8 +81,8 @@ void compute(){
 	cudaMalloc(&dev_hVel, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	
-	dim3 numBlocks((NUMENTITIES+17)/18, (NUMENTITIES+17)/18);
-	dim3 blockSize(18, 18, 3);
+	dim3 numBlocks((NUMENTITIES+15)/16, (NUMENTITIES+15)/16);
+	dim3 blockSize(16, 16, 3);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	cudaDeviceSynchronize();
 	sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
