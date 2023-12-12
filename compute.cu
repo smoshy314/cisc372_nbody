@@ -10,20 +10,19 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k = threadIdx.z;
 	int index = i * NUMENTITIES + j;
-	FILL_VECTOR(dev_accels[index],blockIdx.x,blockDim.x,threadIdx.x)
+
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		
-		// if (i==j) {
-		// 	FILL_VECTOR(dev_accels[index],0,0,0);
-		// }else{
-		// 	vector3 distance;
-		// 	distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
-		// 	if(k==0){
-		// 		double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
-		// 		double magnitude=sqrt(magnitude_sq);
-		// 		double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
-		// 		FILL_VECTOR(dev_accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);}	
-		// }
+		if (i==j) {
+			FILL_VECTOR(dev_accels[index],0,0,0);
+		}else{
+			vector3 distance;
+			distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
+			if(k==0){
+				double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
+				double magnitude=sqrt(magnitude_sq);
+				double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
+				FILL_VECTOR(dev_accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);}	
+		}
 	}
 }
 
@@ -82,19 +81,24 @@ void compute(){
 	cudaMalloc(&dev_hVel, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	
-	dim3 numBlocks((NUMENTITIES+15)/16, (NUMENTITIES+15)/16);
+	//dim3 numBlocks((NUMENTITIES+15)/16, (NUMENTITIES+15)/16);
 	dim3 blockSize(16, 16, 3);
-	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
+	int blockDimX = 16;
+	int blockDimY = 16;
+
+	int gridDim = (NUMENTITIES + blockDimX - 1) / blockDimX; 
+	dim3 grid(gridDim, gridDim)
+	accelComputeKernal<<<gridDim, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	cudaDeviceSynchronize();
-	vector3* accels = (vector3*)malloc(sizeof(vector3) * NUMENTITIES * NUMENTITIES);
-	cudaMemcpy(accels, dev_accels, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
-	for (int i = 0; i < NUMENTITIES; ++i) {
-		for (int j = 0; j < NUMENTITIES; ++j) {
-			printf("(%f, %f, %f) \n", accels[i * NUMENTITIES + j][0], accels[i * NUMENTITIES + j][1], accels[i * NUMENTITIES + j][2]);
-		}
-		printf("\n");
-	}	
-	//sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
+	// vector3* accels = (vector3*)malloc(sizeof(vector3) * NUMENTITIES * NUMENTITIES);
+	// cudaMemcpy(accels, dev_accels, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
+	// for (int i = 0; i < NUMENTITIES; ++i) {
+	// 	for (int j = 0; j < NUMENTITIES; ++j) {
+	// 		printf("(%f, %f, %f) ", accels[i * NUMENTITIES + j][0], accels[i * NUMENTITIES + j][1], accels[i * NUMENTITIES + j][2]);
+	// 	}
+	// 	printf("\n");
+	// }	
+	sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
