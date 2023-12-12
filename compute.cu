@@ -77,13 +77,11 @@ void compute(){
 	cudaMemcpy(dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc(&dev_hVel, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
-	cudaError_t cudaError = cudaGetLastError();
-	
 	
 	dim3 numBlocks((NUMENTITIES+971)/972,1);
 	dim3 blockSize(18, 18, 3);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
-	
+	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
 	}
