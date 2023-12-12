@@ -79,16 +79,13 @@ void compute(){
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaError_t cudaError = cudaGetLastError();
 	
-	dim3 blockSize(18,18,3);
-	dim3 numBlocks((NUMENTITIES+323)/324);
-	
 	
 
+	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
 	}
-	//accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	
 
 	//sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
