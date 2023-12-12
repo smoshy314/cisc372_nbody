@@ -87,7 +87,7 @@ void compute(){
 	int blockDimY = 16;
 
 	int gridDim = (NUMENTITIES + blockDimX - 1) / blockDimX; 
-	dim3 grid(gridDim, gridDim)
+	dim3 grid(gridDim, gridDim);
 	accelComputeKernal<<<gridDim, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	cudaDeviceSynchronize();
 	// vector3* accels = (vector3*)malloc(sizeof(vector3) * NUMENTITIES * NUMENTITIES);
