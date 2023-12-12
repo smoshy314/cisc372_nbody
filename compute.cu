@@ -12,17 +12,18 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 	int index = i * NUMENTITIES + j;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		if (i==j) {
-			FILL_VECTOR(dev_accels[index],0,0,0);
-		}else{
-			vector3 distance;
-			distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
-			if(k==0){
-				double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
-				double magnitude=sqrt(magnitude_sq);
-				double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
-				FILL_VECTOR(dev_accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);}	
-		}
+		FILL_VECTOR(dev_accels[index],i,j,k)
+		// if (i==j) {
+		// 	FILL_VECTOR(dev_accels[index],0,0,0);
+		// }else{
+		// 	vector3 distance;
+		// 	distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
+		// 	if(k==0){
+		// 		double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
+		// 		double magnitude=sqrt(magnitude_sq);
+		// 		double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
+		// 		FILL_VECTOR(dev_accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);}	
+		// }
 	}
 }
 
