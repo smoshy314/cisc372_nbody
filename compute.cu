@@ -63,6 +63,8 @@ void compute(){
 	vector3** dev_accels;
 	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES);
 	
+	dim3 dimGrid(gridD,1);
+	dim3 dimAc(256,1);
 	contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
 	cudaError_t cudaError = cudaGetLastError();
 
@@ -80,8 +82,7 @@ void compute(){
 	dim3 numBlocks((NUMENTITIES+323)/324);
 	
 	int gridD = (NUMENTITIES/256) +1;
-	dim3 dimGrid(gridD,1);
-	dim3 dimAc(256,1);
+	
 
 	
 	if (cudaError != cudaSuccess) {
