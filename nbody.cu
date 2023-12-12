@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 {
 	clock_t t0=clock();
 	int t_now;
-	//srand(time(NULL));
+	srand(time(NULL));
 	srand(1234);
 	initHostMemory(NUMENTITIES);
 	planetFill();
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	// }
 	clock_t t1=clock()-t0;
 #ifdef DEBUG
-	//printSystem(stdout);
+	printSystem(stdout);
 #endif
 	printf("This took a total time of %f seconds\n",(double)t1/CLOCKS_PER_SEC);
 
