@@ -7,12 +7,11 @@
 
 __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vector3* dev_hPos){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
-	int j = blockIdx.y * blockDim.x + threadIdx.y;
+	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k = threadIdx.z;
 	int index = i * NUMENTITIES + j;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		printf("i:%d, j:%d, k%d");
 		int index = i * NUMENTITIES + j;
 
 		if (i==j) {
@@ -84,7 +83,7 @@ void compute(){
 	cudaMalloc(&dev_hVel, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	
-	dim3 numBlocks((NUMENTITIES+971)/972,1);
+	dim3 numBlocks(NUMENTITIES/18, NUMENTITIES/18);
 	dim3 blockSize(18, 18, 3);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	
@@ -97,9 +96,6 @@ void compute(){
 	}
 	cudaMemcpy(hVel, dev_hVel, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	cudaMemcpy(hPos, dev_hPos, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
-	//vector3** accels = (vector3**)malloc(sizeof(vector3*) * NUMENTITIES);
-	//cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
-	
 	//sum up the rows of our matrix to get effect on each entity, then update velocity and position.
 	
 	//free(accels);
