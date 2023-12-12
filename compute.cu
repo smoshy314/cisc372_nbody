@@ -34,6 +34,7 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 __global__ void sumRows(vector3* dev_accels, vector3* dev_hPos, vector3* dev_hVel){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
+	int k;
 
 	if(i < NUMENTITIES && j< NUMENTITIES){
 	vector3 accel_sum={0,0,0};
