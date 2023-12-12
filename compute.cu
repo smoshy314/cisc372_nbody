@@ -89,8 +89,8 @@ void compute(){
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
 	}
-	cudaMemcpy(hVel, dev_hVel, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
-	cudaMemcpy(hPos, dev_hPos, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
+	cudaMemcpy(hVel, dev_hVel, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
+	cudaMemcpy(hPos, dev_hPos, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	//vector3** accels = (vector3**)malloc(sizeof(vector3*) * NUMENTITIES);
 	//cudaMemcpy(accels, dev_accels, sizeof(vector3*)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	
