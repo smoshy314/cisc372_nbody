@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 	randomFill(NUMPLANETS + 1, NUMASTEROIDS);
 	//now we have a system.
 	#ifdef DEBUG
-	//printSystem(stdout);
+	printSystem(stdout);
 	#endif
 
 	compute();
