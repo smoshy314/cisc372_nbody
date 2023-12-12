@@ -9,8 +9,9 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.x + threadIdx.y;
 	int k = threadIdx.z;
-
+	
 	if (i < NUMENTITIES && j < NUMENTITIES) {
+		printf("i:%d, j:%d, k%d");
 		int index = i * NUMENTITIES + j;
 
 		if (i==j) {
