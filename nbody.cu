@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 {
 	clock_t t0=clock();
 	int t_now;
-	srand(time(NULL));
+	//srand(time(NULL));
 	srand(1234);
 	initHostMemory(NUMENTITIES);
 	planetFill();
