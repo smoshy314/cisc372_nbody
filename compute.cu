@@ -34,17 +34,20 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 __global__ void sumRows(vector3* dev_accels, vector3* dev_hPos, vector3* dev_hVel){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
-	int k = threadIdx.z;
 
 	if(i < NUMENTITIES && j< NUMENTITIES){
 	vector3 accel_sum={0,0,0};
-	accel_sum[k]+=dev_accels[i * NUMENTITIES + j][k];
+	for (k=0;k<3;k++)
+		accel_sum[k]+=dev_accels[i * NUMENTITIES + j][k];
+
 		
 //compute the new velocity based on the acceleration and time interval
 //compute the new position based on the velocity and time interval
-	dev_hVel[i][k]+=accel_sum[k]*INTERVAL;
-	dev_hPos[i][k]+=dev_hVel[i][k]*INTERVAL;
+	for (k=0;k<3;k++){	
+		dev_hVel[i][k]+=accel_sum[k]*INTERVAL;
+		dev_hPos[i][k]+=dev_hVel[i][k]*INTERVAL;
 	}
+}
 }
 //compute: Updates the positions and locations of the objects in the system based on gravity.
 //Parameters: None
@@ -95,12 +98,8 @@ void compute(){
 	// 	}
 	// 	printf("\n");
 	// }
-	dim3 sblockSize(16, 16, 3);
-	int sblockDimX = 16;
-	int sblockDimY = 16;
-
-	int sgridDim = (NUMENTITIES + sblockDimX - 1) / sblockDimX; 	
-	sumRows<<<sgridDim, sblockSize>>>(dev_accels, dev_hPos, dev_hVel);
+	
+	sumRows<<<gridDim, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
