@@ -85,7 +85,7 @@ void compute(){
 	dim3 blockSize(16, 16, 3);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	cudaDeviceSynchronize();
-	vector3* accels = malloc(sizeof(vector3) * NUMENTITIES * NUMENTITIES);
+	vector3* accels = (vector3*)malloc(sizeof(vector3) * NUMENTITIES * NUMENTITIES);
 	cudaMemcpy(accels, dev_accels, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	for (int i = 0; i < NUMENTITIES; ++i) {
 		for (int j = 0; j < NUMENTITIES; ++j) {
