@@ -8,7 +8,6 @@
 __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vector3* dev_hPos){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
-	int k = threadIdx.z;
 	int index = i * NUMENTITIES + j;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
@@ -16,12 +15,11 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 			FILL_VECTOR(dev_accels[index],0,0,0);
 		}else{
 			vector3 distance;
-			distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
-			if(k==0){
-				double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
-				double magnitude=sqrt(magnitude_sq);
-				double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
-				FILL_VECTOR(dev_accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);}	
+			for (k=0;k<3;k++) distance[k]=hPos[i][k]-hPos[j][k];
+			double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
+			double magnitude=sqrt(magnitude_sq);
+			double accelmag=-1*GRAV_CONSTANT*mass[j]/magnitude_sq;
+			FILL_VECTOR(accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);	
 		}
 	}
 }
@@ -67,8 +65,7 @@ void compute(){
 	cudaMalloc(&dev_accels, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
 
 	
-	dim3 dimGrid(gridD,1);
-	dim3 dimAc(256,1);
+
 	// contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
 
 	double * dev_mass;
@@ -82,9 +79,9 @@ void compute(){
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	
 	//dim3 numBlocks((NUMENTITIES+15)/16, (NUMENTITIES+15)/16);
-	dim3 blockSize(16, 16, 3);
-	int blockDimX = 16;
-	int blockDimY = 16;
+	dim3 blockSize(32, 32);
+	int blockDimX = 32;
+	int blockDimY = 32;
 
 	int gridDim = (NUMENTITIES + blockDimX - 1) / blockDimX; 
 	dim3 grid(gridDim, gridDim);
@@ -97,8 +94,13 @@ void compute(){
 	// 		printf("(%f, %f, %f) ", accels[i * NUMENTITIES + j][0], accels[i * NUMENTITIES + j][1], accels[i * NUMENTITIES + j][2]);
 	// 	}
 	// 	printf("\n");
-	// }	
-	sumRows<<<gridDim, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
+	// }
+	dim3 sblockSize(16, 16, 3);
+	int sblockDimX = 16;
+	int sblockDimY = 16;
+
+	int sgridDim = (NUMENTITIES + sblockDimX - 1) / sblockDimX; 	
+	sumRows<<<sgridDim, sblockSize>>>(dev_accels, dev_hPos, dev_hVel);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
