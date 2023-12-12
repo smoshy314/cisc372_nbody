@@ -62,7 +62,9 @@ void compute(){
 
 	vector3** dev_accels;
 	cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES);
-
+	
+	contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
+	cudaError_t cudaError = cudaGetLastError();
 
 	double * dev_mass;
 	vector3* dev_hPos;
@@ -81,9 +83,7 @@ void compute(){
 	dim3 dimGrid(gridD,1);
 	dim3 dimAc(256,1);
 
-	dim3 numB((NUMENTITIES+1023)/1024);
-	contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
-	cudaError_t cudaError = cudaGetLastError();
+	
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
 	}
@@ -99,7 +99,6 @@ void compute(){
 	//sum up the rows of our matrix to get effect on each entity, then update velocity and position.
 	
 	//free(accels);
-	cudaFree(dev_hPos);
 	cudaFree(dev_mass);
 	cudaFree(dev_accels);
 	cudaFree(dev_values);
