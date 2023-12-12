@@ -17,7 +17,7 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 		}else{
 			vector3 distance;
 			distance[k]= dev_hPos[i][k] - dev_hPos[j][k];
-			if(k == 0){
+			if(1){
 				double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
 				double magnitude=sqrt(magnitude_sq);
 				double accelmag=-1*GRAV_CONSTANT*dev_mass[j]/magnitude_sq;
