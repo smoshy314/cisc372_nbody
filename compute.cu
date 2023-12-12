@@ -74,8 +74,8 @@ void compute(){
 	cudaMalloc(&dev_mass, sizeof(double) * NUMENTITIES );
 	cudaMemcpy(dev_mass, mass, sizeof(double) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc(&dev_hPos, sizeof(vector3) * NUMENTITIES );
-	cudaError_t cudaError = cudaGetLastError();
 	cudaMemcpy(dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
+	cudaError_t cudaError = cudaGetLastError();
 	cudaMalloc(&dev_hVel, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	
