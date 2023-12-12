@@ -6,8 +6,8 @@
 #include <cuda.h>
 
 __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vector3* dev_hPos){
-	int j = blockIdx.x * blockDim.x + threadIdx.x;
-	int i = blockIdx.y * blockDim.y + threadIdx.y;
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
+	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int index = i * NUMENTITIES + j;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
