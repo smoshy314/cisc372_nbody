@@ -44,8 +44,8 @@ __global__ void sumRows(vector3* dev_accels, vector3* dev_hPos, vector3* dev_hVe
 		
 //compute the new velocity based on the acceleration and time interval
 //compute the new position based on the velocity and time interval
-	atomicAdd(&dev_hVel[i][k], accel_sum[k] * INTERVAL);
-	atomicAdd(&dev_hPos[i][k], dev_hVel[i][k] * INTERVAL);
+	dev_hVel[i][k]+=accel_sum[k]*INTERVAL;
+	dev_hPos[i][k]+=dev_hVel[i][k]*INTERVAL;
 	}
 }
 //compute: Updates the positions and locations of the objects in the system based on gravity.
@@ -85,7 +85,15 @@ void compute(){
 	dim3 blockSize(16, 16, 3);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	cudaDeviceSynchronize();
-	sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
+	vector3* accels = malloc(sizeof(vector3) * NUMENTITIES * NUMENTITIES);
+	cudaMemcpy(accels, dev_accels, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
+	for (int i = 0; i < NUMENTITIES; ++i) {
+		for (int j = 0; j < NUMENTITIES; ++j) {
+			printf("(%f, %f, %f) ", accels[i * NUMENTITIES + j][0], accels[i * NUMENTITIES + j][1], accels[i * NUMENTITIES + j][2]);
+		}
+		printf("\n");
+	}	
+	//sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
