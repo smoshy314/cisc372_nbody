@@ -67,7 +67,6 @@ void compute(){
 	dim3 dimGrid(gridD,1);
 	dim3 dimAc(256,1);
 	contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
-	cudaError_t cudaError = cudaGetLastError();
 
 	double * dev_mass;
 	vector3* dev_hPos;
