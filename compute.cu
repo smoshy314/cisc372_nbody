@@ -55,7 +55,7 @@ __global__ void sumRows(vector3* dev_accels, vector3* dev_hPos, vector3* dev_hVe
 void compute(){
 	//make an acceleration matrix which is NUMENTITIES squared in size;
 	int i,j,k;
-	// vector3* dev_values;
+	//vector3* dev_values;
 	// vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	// cudaMalloc(&dev_values, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
 	// cudaMemcpy(dev_values, values,sizeof(vector3) * NUMENTITIES * NUMENTITIES,cudaMemcpyHostToDevice);
@@ -99,7 +99,6 @@ void compute(){
 	//free(accels);
 	cudaFree(dev_mass);
 	cudaFree(dev_accels);
-	cudaFree(dev_values);
 	cudaFree(dev_hPos);
 	cudaFree(dev_hVel);
 }
