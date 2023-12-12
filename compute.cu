@@ -44,8 +44,8 @@ __global__ void sumRows(vector3* dev_accels, vector3* dev_hPos, vector3* dev_hVe
 		
 //compute the new velocity based on the acceleration and time interval
 //compute the new position based on the velocity and time interval
-	dev_hVel[i][k]+=accel_sum[k]*INTERVAL;
-	dev_hPos[i][k]+=dev_hVel[i][k]*INTERVAL;
+	atomicAdd(&dev_hVel[i][k], accel_sum[k] * INTERVAL);
+	atomicAdd(&dev_hPos[i][k], dev_hVel[i][k] * INTERVAL);
 	}
 }
 //compute: Updates the positions and locations of the objects in the system based on gravity.
