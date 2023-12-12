@@ -80,8 +80,8 @@ void compute(){
 	cudaError_t cudaError = cudaGetLastError();
 	
 	
-	dim3 numBlocks((NUMENTITIES+971)/972,1)
-	dim3 blockSize(18, 18, 3)
+	dim3 numBlocks((NUMENTITIES+971)/972,1);
+	dim3 blockSize(18, 18, 3);
 	accelComputeKernal<<<numBlocks, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 	
 	if (cudaError != cudaSuccess) {
