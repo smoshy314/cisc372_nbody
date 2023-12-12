@@ -61,10 +61,9 @@ void compute(){
 	// vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
 	// cudaMalloc(&dev_values, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
 	// cudaMemcpy(dev_values, values,sizeof(vector3) * NUMENTITIES * NUMENTITIES,cudaMemcpyHostToDevice);
-
-	int gridD = (NUMENTITIES/256) +1;
 	// vector3** dev_accels;
 	// cudaMalloc(&dev_accels, sizeof(vector3*) * NUMENTITIES);
+	
 	vector3* dev_accels;
 	cudaMalloc(&dev_accels, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
 
@@ -88,22 +87,14 @@ void compute(){
 	int blockDimY = 32;
 
 	int gridDim = (NUMENTITIES + blockDimX - 1) / blockDimX; 
-	dim3 grid(gridDim, gridDim);
-	accelComputeKernal<<<gridDim, blockSize>>>(dev_accels, dev_mass, dev_hPos);
-	cudaDeviceSynchronize();
-	// vector3* accels = (vector3*)malloc(sizeof(vector3) * NUMENTITIES * NUMENTITIES);
-	// cudaMemcpy(accels, dev_accels, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
-	// for (int i = 0; i < NUMENTITIES; ++i) {
-	// 	for (int j = 0; j < NUMENTITIES; ++j) {
-	// 		printf("(%f, %f, %f) ", accels[i * NUMENTITIES + j][0], accels[i * NUMENTITIES + j][1], accels[i * NUMENTITIES + j][2]);
-	// 	}
-	// 	printf("\n");
-	// }
-	
-	sumRows<<<gridDim, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
-	cudaError_t cudaError = cudaGetLastError();
-	if (cudaError != cudaSuccess) {
-		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
+	for (t_now=0;t_now<DURATION;t_now+=INTERVAL){
+		accelComputeKernal<<<gridDim, blockSize>>>(dev_accels, dev_mass, dev_hPos);
+		cudaDeviceSynchronize();
+		sumRows<<<gridDim, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
+		cudaError_t cudaError = cudaGetLastError();
+		if (cudaError != cudaSuccess) {
+			printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
+		}
 	}
 	cudaMemcpy(hVel, dev_hVel, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	cudaMemcpy(hPos, dev_hPos, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
