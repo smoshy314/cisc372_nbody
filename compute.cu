@@ -12,8 +12,6 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 	int index = i * NUMENTITIES + j;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
-		int index = i * NUMENTITIES + j;
-
 		if (i==j) {
 			FILL_VECTOR(dev_accels[index],0,0,0);
 		}else{
@@ -57,10 +55,10 @@ __global__ void sumRows(vector3* dev_accels, vector3* dev_hPos, vector3* dev_hVe
 void compute(){
 	//make an acceleration matrix which is NUMENTITIES squared in size;
 	int i,j,k;
-	vector3* dev_values;
-	vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
-	cudaMalloc(&dev_values, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
-	cudaMemcpy(dev_values, values,sizeof(vector3) * NUMENTITIES * NUMENTITIES,cudaMemcpyHostToDevice);
+	// vector3* dev_values;
+	// vector3* values=(vector3*)malloc(sizeof(vector3)*NUMENTITIES*NUMENTITIES);
+	// cudaMalloc(&dev_values, sizeof(vector3) * NUMENTITIES * NUMENTITIES);
+	// cudaMemcpy(dev_values, values,sizeof(vector3) * NUMENTITIES * NUMENTITIES,cudaMemcpyHostToDevice);
 
 	int gridD = (NUMENTITIES/256) +1;
 	// vector3** dev_accels;
