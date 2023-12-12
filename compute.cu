@@ -70,7 +70,6 @@ void compute(){
 	
 
 	// contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
-
 	double * dev_mass;
 	vector3* dev_hPos;
 	vector3* dev_hVel;
