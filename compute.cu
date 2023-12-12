@@ -7,7 +7,7 @@
 
 __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vector3* dev_hPos){
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
-	int j = blockIdx.y * blockDim.y + threadIdx.y;
+	int j = blockIdx.y * blockDim.x + threadIdx.y;
 	int k = threadIdx.z;
 
 	if (i < NUMENTITIES && j < NUMENTITIES) {
