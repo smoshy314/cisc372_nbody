@@ -38,7 +38,7 @@ __global__ void sumRows(vector3** dev_accels, vector3* dev_hPos, vector3* dev_hV
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k = threadIdx.z;
 
-	if(i < NUMENTITIES & j< NUMENTITIES){
+	if(i < NUMENTITIES && j< NUMENTITIES){
 	vector3 accel_sum={0,0,0};
 	accel_sum[k]+=dev_accels[i][j][k];
 		
