@@ -15,11 +15,11 @@ __global__ void accelComputeKernal(vector3* dev_accels, double * dev_mass, vecto
 			FILL_VECTOR(dev_accels[index],0,0,0);
 		}else{
 			vector3 distance;
-			for (k=0;k<3;k++) distance[k]=hPos[i][k]-hPos[j][k];
+			for (int k=0;k<3;k++) distance[k]=dev_hPos[i][k]-dev_hPos[j][k];
 			double magnitude_sq=distance[0]*distance[0]+distance[1]*distance[1]+distance[2]*distance[2];
 			double magnitude=sqrt(magnitude_sq);
 			double accelmag=-1*GRAV_CONSTANT*mass[j]/magnitude_sq;
-			FILL_VECTOR(accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);	
+			FILL_VECTOR(dev_accels[index],accelmag*distance[0]/magnitude,accelmag*distance[1]/magnitude,accelmag*distance[2]/magnitude);	
 		}
 	}
 }
