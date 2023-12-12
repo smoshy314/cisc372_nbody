@@ -87,7 +87,7 @@ void compute(){
 	int blockDimY = 32;
 
 	int gridDim = (NUMENTITIES + blockDimX - 1) / blockDimX; 
-	for (t_now=0;t_now<DURATION;t_now+=INTERVAL){
+	for (int t_now=0;t_now<DURATION;t_now+=INTERVAL){
 		accelComputeKernal<<<gridDim, blockSize>>>(dev_accels, dev_mass, dev_hPos);
 		cudaDeviceSynchronize();
 		sumRows<<<gridDim, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
