@@ -41,7 +41,7 @@ __global__ void sumRows(vector3* dev_accels, vector3* dev_hPos, vector3* dev_hVe
 
 	if(i < NUMENTITIES && j< NUMENTITIES){
 	vector3 accel_sum={0,0,0};
-	accel_sum[k]+=dev_accels[i * NUMENTITIES + j;][k];
+	accel_sum[k]+=dev_accels[i * NUMENTITIES + j][k];
 		
 //compute the new velocity based on the acceleration and time interval
 //compute the new position based on the velocity and time interval
@@ -70,7 +70,7 @@ void compute(){
 	
 	dim3 dimGrid(gridD,1);
 	dim3 dimAc(256,1);
-	contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
+	// contructAccels<<<dimGrid, dimAc>>>(dev_accels, dev_values);
 
 	double * dev_mass;
 	vector3* dev_hPos;
