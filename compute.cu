@@ -76,8 +76,8 @@ void compute(){
 	cudaMalloc(&dev_hPos, sizeof(vector3) * NUMENTITIES );
 	cudaMemcpy(dev_hPos, hPos,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
 	cudaMalloc(&dev_hVel, sizeof(vector3) * NUMENTITIES );
-	cudaError_t cudaError = cudaGetLastError();
 	cudaMemcpy(dev_hVel, hVel,sizeof(vector3) * NUMENTITIES,cudaMemcpyHostToDevice);
+	cudaError_t cudaError = cudaGetLastError();
 	
 	dim3 blockSize(18,18,3);
 	dim3 numBlocks((NUMENTITIES+323)/324);
