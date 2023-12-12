@@ -98,7 +98,7 @@ void compute(){
 	// 	}
 	// 	printf("\n");
 	// }	
-	sumRows<<<numBlocks, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
+	sumRows<<<gridDim, blockSize>>>(dev_accels, dev_hPos, dev_hVel);
 	cudaError_t cudaError = cudaGetLastError();
 	if (cudaError != cudaSuccess) {
 		printf("CUDA Error: %s\n", cudaGetErrorString(cudaError));
