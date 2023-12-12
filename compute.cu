@@ -90,7 +90,7 @@ void compute(){
 	cudaMemcpy(accels, dev_accels, sizeof(vector3)*NUMENTITIES, cudaMemcpyDeviceToHost);
 	for (int i = 0; i < NUMENTITIES; ++i) {
 		for (int j = 0; j < NUMENTITIES; ++j) {
-			printf("(%f, %f, %f) ", accels[i * NUMENTITIES + j][0], accels[i * NUMENTITIES + j][1], accels[i * NUMENTITIES + j][2]);
+			printf("(%f, %f, %f) \n", accels[i * NUMENTITIES + j][0], accels[i * NUMENTITIES + j][1], accels[i * NUMENTITIES + j][2]);
 		}
 		printf("\n");
 	}	
